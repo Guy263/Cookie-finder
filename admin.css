@@ -1,0 +1,444 @@
+/* Admin Panel CSS */
+:root {
+  --primary-color: #4a6cf7;
+  --primary-hover: #3a5ce4;
+  --danger-color: #e74c3c;
+  --danger-hover: #c0392b;
+  --success-color: #2ecc71;
+  --success-hover: #27ae60;
+  --secondary-color: #6c757d;
+  --secondary-hover: #5a6268;
+  --light-bg: #f8f9fa;
+  --dark-text: #343a40;
+  --border-color: #dee2e6;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --datadome-color: #9b59b6;
+  --datadome-bg: #f0e6f6;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+  color: var(--dark-text);
+  line-height: 1.6;
+}
+
+/* Header and Navigation */
+.admin-header {
+  background: linear-gradient(135deg, var(--primary-color), #5e7bf7);
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px var(--shadow-color);
+  margin-bottom: 2rem;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Admin Panel */
+.admin-panel {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px var(--shadow-color);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.admin-panel h1 {
+  color: var(--primary-color);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--light-bg);
+  padding-bottom: 0.8rem;
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--dark-text);
+  font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+  outline: none;
+}
+
+textarea {
+  min-height: 100px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+button {
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.3);
+}
+
+button:before {
+  margin-right: 8px;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button.danger {
+  background-color: var(--danger-color);
+}
+
+button.danger:hover {
+  background-color: var(--danger-hover);
+}
+
+button.secondary {
+  background-color: var(--secondary-color);
+}
+
+button.secondary:hover {
+  background-color: var(--secondary-hover);
+}
+
+button.success {
+  background-color: var(--success-color);
+}
+
+button.success:hover {
+  background-color: var(--success-hover);
+}
+
+/* Add icons to buttons */
+#addUserBtn:before { content: "\f234"; }
+#removeUserBtn:before { content: "\f1f8"; }
+#enableUserBtn:before { content: "\f205"; }
+#disableUserBtn:before { content: "\f204"; }
+#addBalanceBtn:before { content: "\f155"; }
+#addDatadomeBtn:before { content: "\f084"; }
+#listUsersBtn:before { content: "\f0c9"; }
+
+/* Result Messages */
+#result {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: var(--light-bg);
+  border-left: 4px solid var(--primary-color);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#result.error {
+  border-left-color: var(--danger-color);
+  background-color: #fff5f5;
+  color: var(--danger-color);
+}
+
+#result.success {
+  border-left-color: var(--success-color);
+  background-color: #f0fff4;
+  color: var(--success-color);
+}
+
+/* User List Table */
+#userList {
+  margin-top: 2rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: var(--dark-text);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Status Indicators */
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status.active {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status.inactive {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Balance Display */
+.balance {
+  font-weight: 600;
+  color: var(--success-color);
+}
+
+/* DataDome Badge */
+.datadome-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: var(--datadome-bg);
+  color: var(--datadome-color);
+  margin-right: 0.5rem;
+}
+
+/* DataDome Tokens Modal */
+.datadome-tokens {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 90%;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.datadome-token {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  padding: 1rem;
+  margin-bottom: 0.8rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  word-break: break-all;
+  border-left: 3px solid var(--datadome-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--datadome-color);
+  font-size: 1.3rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--secondary-color);
+  min-width: auto;
+  padding: 0.3rem;
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: var(--dark-text);
+  background: none;
+  transform: none;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Table Action Buttons */
+td button {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  min-width: auto;
+  margin-right: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-panel {
+    padding: 1.5rem;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  button {
+    width: 100%;
+  }
+  
+  th, td {
+    padding: 0.8rem;
+  }
+  
+  .datadome-tokens {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* Additional Styles for Table Actions */
+td:last-child {
+  white-space: nowrap;
+}
+
+/* Tooltip for DataDome Cell */
+td[title] {
+  cursor: pointer;
+  position: relative;
+}
+
+td[title]:hover:after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* Font Awesome CDN Link - Add to your HTML */
+/* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> */

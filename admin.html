@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .admin-panel {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    textarea {
+      min-height: 80px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    button {
+      padding: 10px 15px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    button:hover {
+      background-color: #3a7bc8;
+    }
+    
+    button.danger {
+      background-color: #e74c3c;
+    }
+    
+    button.danger:hover {
+      background-color: #c0392b;
+    }
+    
+    button.secondary {
+      background-color: #7f8c8d;
+    }
+    
+    button.secondary:hover {
+      background-color: #6c7a7d;
+    }
+    
+    button.success {
+      background-color: #2ecc71;
+    }
+    
+    button.success:hover {
+      background-color: #27ae60;
+    }
+    
+    button.premium {
+      background-color: #f39c12;
+    }
+    
+    button.premium:hover {
+      background-color: #d35400;
+    }
+    
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 4px;
+      background-color: #f8f9fa;
+      border-left: 4px solid #4a90e2;
+    }
+    
+    #result.error {
+      border-left-color: #e74c3c;
+    }
+    
+    #result.success {
+      border-left-color: #2ecc71;
+    }
+    
+    #userList {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+      font-weight: 600;
+    }
+    
+    tr:last-child td {
+      border-bottom: none;
+    }
+    
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .status.active {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+    
+    .status.inactive {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    
+    .balance {
+      font-weight: bold;
+      color: #27ae60;
+    }
+    
+    .datadome-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      background-color: #f0e6f6;
+      color: #9b59b6;
+    }
+    
+    .premium-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      background-color: #fff3e0;
+      color: #f39c12;
+    }
+    
+    .datadome-tokens, .premium-keys {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      width: 90%;
+    }
+    
+    .datadome-token, .premium-key {
+      font-family: monospace;
+      font-size: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      word-break: break-all;
+    }
+    
+    .datadome-token {
+      border-left: 3px solid #9b59b6;
+    }
+    
+    .premium-key {
+      border-left: 3px solid #f39c12;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .modal-header h3 {
+      margin: 0;
+    }
+    
+    .modal-header h3.datadome {
+      color: #9b59b6;
+    }
+    
+    .modal-header h3.premium {
+      color: #f39c12;
+    }
+    
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #7f8c8d;
+    }
+    
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 99;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-panel">
+    <h1>User Management</h1>
+    
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter username">
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter password">
+    </div>
+    
+    <div class="form-group">
+      <label for="balance">Balance</label>
+      <input type="number" id="balance" placeholder="Enter balance amount" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="datadome">DataDome Token</label>
+      <textarea id="datadome" placeholder="Enter DataDome token"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label for="premium">Premium Key</label>
+      <textarea id="premium" placeholder="Enter Premium key"></textarea>
+    </div>
+    
+    <div class="button-group">
+      <button id="addUserBtn">Add User</button>
+      <button id="removeUserBtn" class="danger">Remove User</button>
+      <button id="enableUserBtn">Enable User</button>
+      <button id="disableUserBtn" class="secondary">Disable User</button>
+      <button id="addBalanceBtn" class="success">Add Balance</button>
+      <button id="addDatadomeBtn" class="success">Add DataDome</button>
+      <button id="addPremiumBtn" class="premium">Add Premium</button>
+      <button id="listUsersBtn" class="secondary">List Users</button>
+    </div>
+    
+    <div id="result" style="display: none;"></div>
+    
+    <div id="userList" style="display: none;">
+      <table>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Status</th>
+            <th>Balance</th>
+            <th>DataDome</th>
+            <th>Premium</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody">
+          <!-- User data will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div id="modalOverlay" class="modal-overlay"></div>
+  <div id="datadomeTokens" class="datadome-tokens"></div>
+  <div id="premiumKeys" class="premium-keys"></div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const balanceInput = document.getElementById('balance');
+      const datadomeInput = document.getElementById('datadome');
+      const premiumInput = document.getElementById('premium');
+      const addUserBtn = document.getElementById('addUserBtn');
+      const removeUserBtn = document.getElementById('removeUserBtn');
+      const enableUserBtn = document.getElementById('enableUserBtn');
+      const disableUserBtn = document.getElementById('disableUserBtn');
+      const addBalanceBtn = document.getElementById('addBalanceBtn');
+      const addDatadomeBtn = document.getElementById('addDatadomeBtn');
+      const addPremiumBtn = document.getElementById('addPremiumBtn');
+      const listUsersBtn = document.getElementById('listUsersBtn');
+      const resultDiv = document.getElementById('result');
+      const userList = document.getElementById('userList');
+      const userTableBody = document.getElementById('userTableBody');
+      const datadomeTokensDiv = document.getElementById('datadomeTokens');
+      const premiumKeysDiv = document.getElementById('premiumKeys');
+      const modalOverlay = document.getElementById('modalOverlay');
+      
+      // Admin key for security
+      const ADMIN_KEY = 'saiki_admin_key';
+      
+      // Telegram bot configuration
+      const TOKEN = "7571094543:AAFHaf1NtRvtnZaBJLJgQCWvqUGn5EWx3-8";
+      const ADMIN_ID = 5065566008;
+      
+      // Function to send message to Telegram
+      async function sendTelegramMessage(message) {
+        try {
+          // Using a CORS proxy to avoid CORS issues
+          const corsProxy = "https://cors-anywhere.herokuapp.com/";
+          const url = `${corsProxy}https://api.telegram.org/bot${TOKEN}/sendMessage`;
+          
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Origin': window.location.origin
+            },
+            body: JSON.stringify({
+              chat_id: ADMIN_ID,
+              text: message,
+              parse_mode: 'HTML'
+            })
+          });
+          
+          const data = await response.json();
+          return data.ok;
+        } catch (error) {
+          console.error('Error sending Telegram message:', error);
+          return false;
+        }
+      }
+      
+      // Function to get users from localStorage
+      function getUsers() {
+        try {
+          return JSON.parse(localStorage.getItem('userDatabase')) || [];
+        } catch (error) {
+          console.error('Error parsing user database:', error);
+          return [];
+        }
+      }
+      
+      // Function to save users to localStorage
+      function saveUsers(users) {
+        try {
+          localStorage.setItem('userDatabase', JSON.stringify(users));
+          return true;
+        } catch (error) {
+          console.error('Error saving user database:', error);
+          return false;
+        }
+      }
+      
+      // Function to show result message
+      function showResult(message, isError = false, isSuccess = false) {
+        resultDiv.textContent = message;
+        resultDiv.style.display = 'block';
+        resultDiv.className = '';
+        
+        if (isError) {
+          resultDiv.classList.add('error');
+        } else if (isSuccess) {
+          resultDiv.classList.add('success');
+        }
+        
+        // Hide after 5 seconds
+        setTimeout(() => {
+          resultDiv.style.display = 'none';
+        }, 5000);
+      }
+      
+      // Function to show DataDome tokens
+      function showDatadomeTokens(username) {
+        const users = getUsers();
+        const user = users.find(u => u.username === username);
+        
+        if (!user || !user.datadome) {
+          return;
+        }
+        
+        // Convert to array if it's not already
+        const tokens = Array.isArray(user.datadome) ? user.datadome : [user.datadome];
+        
+        if (tokens.length === 0) {
+          return;
+        }
+        
+        datadomeTokensDiv.innerHTML = `
+          <div class="modal-header">
+            <h3 class="datadome">DataDome Tokens for ${username}</h3>
+            <button class="close-button" id="closeDatadomeTokens">&times;</button>
+          </div>
+          <div>
+            ${tokens.map((token, index) => `
+              <div class="datadome-token">
+                ${index + 1}. ${token}
+              </div>
+            `).join('')}
+          </div>
+        `;
+        
+        modalOverlay.style.display = 'block';
+        datadomeTokensDiv.style.display = 'block';
+        document.getElementById('closeDatadomeTokens').addEventListener('click', () => {
+          modalOverlay.style.display = 'none';
+          datadomeTokensDiv.style.display = 'none';
+        });
+        
+        modalOverlay.addEventListener('click', () => {
+          modalOverlay.style.display = 'none';
+          datadomeTokensDiv.style.display = 'none';
+        });
+      }
+      
+      // Function to show Premium keys
+      function showPremiumKeys(username) {
+        const users = getUsers();
+        const user = users.find(u => u.username === username);
+        
+        if (!user || !user.premium) {
+          return;
+        }
+        
+        // Convert to array if it's not already
+        const keys = Array.isArray(user.premium) ? user.premium : [user.premium];
+        
+        if (keys.length === 0) {
+          return;
+        }
+        
+        premiumKeysDiv.innerHTML = `
+          <div class="modal-header">
+            <h3 class="premium">Premium Keys for ${username}</h3>
+            <button class="close-button" id="closePremiumKeys">&times;</button>
+          </div>
+          <div>
+            ${keys.map((key, index) => `
+              <div class="premium-key">
+                ${index + 1}. ${key}
+              </div>
+            `).join('')}
+          </div>
+        `;
+        
+        modalOverlay.style.display = 'block';
+        premiumKeysDiv.style.display = 'block';
+        
+        document.getElementById('closePremiumKeys').addEventListener('click', () => {
+          modalOverlay.style.display = 'none';
+          premiumKeysDiv.style.display = 'none';
+        });
+        
+        modalOverlay.addEventListener('click', () => {
+          modalOverlay.style.display = 'none';
+          premiumKeysDiv.style.display = 'none';
+        });
+      }
+      
+      // Function to refresh user list
+      function refreshUserList() {
+        const users = getUsers();
+        userTableBody.innerHTML = '';
+        
+        if (users.length === 0) {
+          userList.style.display = 'none';
+          return;
+        }
+        
+        users.forEach(user => {
+          const row = document.createElement('tr');
+          
+          // Username cell
+          const usernameCell = document.createElement('td');
+          usernameCell.textContent = user.username;
+          row.appendChild(usernameCell);
+          
+          // Status cell
+          const statusCell = document.createElement('td');
+          const statusSpan = document.createElement('span');
+          statusSpan.className = `status ${user.active !== false ? 'active' : 'inactive'}`;
+          statusSpan.textContent = user.active !== false ? 'Active' : 'Inactive';
+          statusCell.appendChild(statusSpan);
+          row.appendChild(statusCell);
+          
+          // Balance cell
+          const balanceCell = document.createElement('td');
+          balanceCell.className = 'balance';
+          balanceCell.textContent = user.balance ? `$${user.balance}` : '$0';
+          row.appendChild(balanceCell);
+          
+          // DataDome cell
+          const datadomeCell = document.createElement('td');
+          
+          // Check if user has datadome tokens
+          let tokenCount = 0;
+          if (user.datadome) {
+            if (Array.isArray(user.datadome)) {
+              tokenCount = user.datadome.length;
+            } else {
+              // Legacy format - single token
+              tokenCount = user.datadome ? 1 : 0;
+              // Convert to array format for consistency
+              if (tokenCount > 0) {
+                user.datadome = [user.datadome];
+                saveUsers(users);
+              }
+            }
+          }
+          
+          if (tokenCount > 0) {
+            const badgeSpan = document.createElement('span');
+            badgeSpan.className = 'datadome-badge';
+            badgeSpan.textContent = tokenCount;
+            
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = tokenCount === 1 ? ' Token' : ' Tokens';
+            
+            datadomeCell.appendChild(badgeSpan);
+            datadomeCell.appendChild(labelSpan);
+            
+            datadomeCell.style.cursor = 'pointer';
+            datadomeCell.title = 'Click to view DataDome tokens';
+            datadomeCell.addEventListener('click', () => {
+              showDatadomeTokens(user.username);
+            });
+          } else {
+            datadomeCell.textContent = 'None';
+          }
+          
+          row.appendChild(datadomeCell);
+          
+          // Premium cell
+          const premiumCell = document.createElement('td');
+          
+          // Check if user has premium keys
+          let keyCount = 0;
+          if (user.premium) {
+            if (Array.isArray(user.premium)) {
+              keyCount = user.premium.length;
+            } else {
+              // Legacy format - single key
+              keyCount = user.premium ? 1 : 0;
+              // Convert to array format for consistency
+              if (keyCount > 0) {
+                user.premium = [user.premium];
+                saveUsers(users);
+              }
+            }
+          }
+          
+          if (keyCount > 0) {
+            const badgeSpan = document.createElement('span');
+            badgeSpan.className = 'premium-badge';
+            badgeSpan.textContent = keyCount;
+            
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = keyCount === 1 ? ' Key' : ' Keys';
+            
+            premiumCell.appendChild(badgeSpan);
+            premiumCell.appendChild(labelSpan);
+            
+            premiumCell.style.cursor = 'pointer';
+            premiumCell.title = 'Click to view Premium keys';
+            premiumCell.addEventListener('click', () => {
+              showPremiumKeys(user.username);
+            });
+          } else {
+            premiumCell.textContent = 'None';
+          }
+          
+          row.appendChild(premiumCell);
+          
+          // Actions cell
+          const actionsCell = document.createElement('td');
+          
+          // Toggle status button
+          const toggleBtn = document.createElement('button');
+          toggleBtn.textContent = user.active !== false ? 'Disable' : 'Enable';
+          toggleBtn.className = user.active !== false ? 'secondary' : '';
+          toggleBtn.style.marginRight = '5px';
+          toggleBtn.onclick = () => {
+            if (user.active !== false) {
+              disableUser(user.username);
+            } else {
+              enableUser(user.username);
+            }
+          };
+          
+          // Add balance button
+          const addBalanceBtn = document.createElement('button');
+          addBalanceBtn.textContent = 'Add Balance';
+          addBalanceBtn.className = 'success';
+          addBalanceBtn.style.marginRight = '5px';
+          addBalanceBtn.onclick = () => {
+            const amount = prompt(`Enter amount to add to ${user.username}'s balance:`, '10');
+            if (amount !== null) {
+              const numAmount = parseFloat(amount);
+              if (!isNaN(numAmount) && numAmount > 0) {
+                addBalance(user.username, numAmount);
+              } else {
+                alert('Please enter a valid positive number');
+              }
+            }
+          };
+          
+          // Add DataDome button
+          const addDatadomeBtn = document.createElement('button');
+          addDatadomeBtn.textContent = 'Add DataDome';
+          addDatadomeBtn.className = 'success';
+          addDatadomeBtn.style.marginRight = '5px';
+          addDatadomeBtn.onclick = () => {
+            const token = prompt(`Enter DataDome token for ${user.username}:`);
+            if (token !== null && token.trim() !== '') {
+              addDatadome(user.username, token.trim());
+            } else {
+              alert('Please enter a valid DataDome token');
+            }
+          };
+          
+          // Add Premium button
+          const addPremiumBtn = document.createElement('button');
+          addPremiumBtn.textContent = 'Add Premium';
+          addPremiumBtn.className = 'premium';
+          addPremiumBtn.style.marginRight = '5px';
+          addPremiumBtn.onclick = () => {
+            const key = prompt(`Enter Premium key for ${user.username}:`);
+            if (key !== null && key.trim() !== '') {
+              addPremium(user.username, key.trim());
+            } else {
+              alert('Please enter a valid Premium key');
+            }
+          };
+          
+          // Remove button
+          const removeBtn = document.createElement('button');
+          removeBtn.textContent = 'Remove';
+          removeBtn.className = 'danger';
+          removeBtn.onclick = () => {
+            if (confirm(`Are you sure you want to remove user "${user.username}"?`)) {
+              removeUser(user.username);
+            }
+          };
+          
+          actionsCell.appendChild(toggleBtn);
+          actionsCell.appendChild(addBalanceBtn);
+          actionsCell.appendChild(addDatadomeBtn);
+          actionsCell.appendChild(addPremiumBtn);
+          actionsCell.appendChild(removeBtn);
+          row.appendChild(actionsCell);
+          
+          userTableBody.appendChild(row);
+        });
+        
+        userList.style.display = 'block';
+      }
+      
+      // Function to add a user
+      function addUser(username, password, balance = 0, datadomeToken = '', premiumKey = '') {
+        if (!username || !password) {
+          showResult('Username and password are required', true);
+          return;
+        }
+        
+        const users = getUsers();
+        
+        if (users.some(u => u.username === username)) {
+          showResult(`User "${username}" already exists`, true);
+          return;
+        }
+        
+        const balanceAmount = parseFloat(balance) || 0;
+        const datadomeTokens = datadomeToken.trim() ? [datadomeToken.trim()] : [];
+        const premiumKeys = premiumKey.trim() ? [premiumKey.trim()] : [];
+        
+        // Store the premium key for generateStandardCookie function
+        if (premiumKey.trim()) {
+          localStorage.setItem('lastAddedPremiumKey', premiumKey.trim());
+        }
+        
+        users.push({
+          username,
+          password,
+          active: true,
+          balance: balanceAmount,
+          datadome: datadomeTokens,
+          premium: premiumKeys
+        });
+        
+        if (saveUsers(users)) {
+          const datadomeInfo = datadomeTokens.length > 0 ? 
+            `${datadomeTokens.length} DataDome token` : 
+            'no DataDome token';
+          
+          const premiumInfo = premiumKeys.length > 0 ? 
+            `${premiumKeys.length} Premium key` : 
+            'no Premium key';
+          
+          showResult(`User "${username}" has been added successfully with $${balanceAmount} balance, ${datadomeInfo}, and ${premiumInfo}`, false, true);
+          
+          const telegramMessage = `✅ <b>User Added</b>\n\n<b>Username:</b> ${username}\n<b>Password:</b> ${password}\n<b>Balance:</b> $${balanceAmount}\n<b>DataDome:</b> ${datadomeTokens.length > 0 ? 'Yes' : 'No'}\n<b>Premium:</b> ${premiumKeys.length > 0 ? 'Yes' : 'No'}`;
+          
+          sendTelegramMessage(telegramMessage);
+          refreshUserList();
+          
+          // Clear inputs
+          usernameInput.value = '';
+          passwordInput.value = '';
+          balanceInput.value = '';
+          datadomeInput.value = '';
+          premiumInput.value = '';
+        } else {
+          showResult('Failed to add user', true);
+        }
+      }
+      
+      // Function to add balance to a user
+      function addBalance(username, amount) {
+        if (!username) {
+          showResult('Username is required', true);
+          return;
+        }
+        
+        if (isNaN(amount) || amount <= 0) {
+          showResult('Please enter a valid positive amount', true);
+          return;
+        }
+        
+        const users = getUsers();
+        const userIndex = users.findIndex(u => u.username === username);
+        
+        if (userIndex === -1) {
+          showResult(`User "${username}" not found`, true);
+          return;
+        }
+        
+        // Initialize balance if it doesn't exist
+        if (!users[userIndex].balance) {
+          users[userIndex].balance = 0;
+        }
+        
+        // Add the amount
+        users[userIndex].balance += parseFloat(amount);
+        
+        if (saveUsers(users)) {
+          showResult(`Added $${amount} to ${username}'s balance. New balance: $${users[userIndex].balance}`, false, true);
+          sendTelegramMessage(`💰 <b>Balance Added</b>\n\n<b>Username:</b> ${username}\n<b>Amount Added:</b> $${amount}\n<b>New Balance:</b> $${users[userIndex].balance}`);
+          refreshUserList();
+          
+          // Clear balance input
+          balanceInput.value = '';
+        } else {
+          showResult('Failed to add balance', true);
+        }
+      }
+      
+      // Function to add DataDome to a user
+      function addDatadome(username, token) {
+        if (!username) {
+          showResult('Username is required', true);
+          return;
+        }
+        
+        if (!token || token.trim() === '') {
+          showResult('Please enter a valid DataDome token', true);
+          return;
+        }
+        
+        const users = getUsers();
+        const userIndex = users.findIndex(u => u.username === username);
+        
+        if (userIndex === -1) {
+          showResult(`User "${username}" not found`, true);
+          return;
+        }
+        
+        // Initialize datadome array if it doesn't exist
+        if (!users[userIndex].datadome) {
+          users[userIndex].datadome = [];
+        } else if (!Array.isArray(users[userIndex].datadome)) {
+          // Convert legacy format to array
+          users[userIndex].datadome = [users[userIndex].datadome];
+        }
+        
+        // Add the token
+        users[userIndex].datadome.push(token.trim());
+        
+        if (saveUsers(users)) {
+          const tokenCount = users[userIndex].datadome.length;
+          showResult(`Added DataDome token to ${username}. Total tokens: ${tokenCount}`, false, true);
+          sendTelegramMessage(`🛡️ <b>DataDome Token Added</b>\n\n<b>Username:</b> ${username}\n<b>Total Tokens:</b> ${tokenCount}`);
+          refreshUserList();
+          
+          // Clear datadome input
+          datadomeInput.value = '';
+        } else {
+          showResult('Failed to add DataDome token', true);
+        }
+      }
+      
+      // Function to add Premium to a user
+      function addPremium(username, key) {
+        if (!username) {
+          showResult('Username is required', true);
+          return;
+        }
+        
+        if (!key || key.trim() === '') {
+          showResult('Please enter a valid Premium key', true);
+          return;
+        }
+        
+        // Store the premium key for generateStandardCookie function
+        localStorage.setItem('lastAddedPremiumKey', key.trim());
+        
+        const users = getUsers();
+        const userIndex = users.findIndex(u => u.username === username);
+        
+        if (userIndex === -1) {
+          showResult(`User "${username}" not found`, true);
+          return;
+        }
+        
+        // Initialize premium array if it doesn't exist
+        if (!users[userIndex].premium) {
+          users[userIndex].premium = [];
+        } else if (!Array.isArray(users[userIndex].premium)) {
+          // Convert legacy format to array
+          users[userIndex].premium = [users[userIndex].premium];
+        }
+        
+        // Add the premium key
+        users[userIndex].premium.push(key.trim());
+        
+        if (saveUsers(users)) {
+          const keyCount = users[userIndex].premium.length;
+          showResult(`Added Premium key to ${username}. Total keys: ${keyCount}`, false, true);
+          sendTelegramMessage(`🔑 <b>Premium Key Added</b>\n\n<b>Username:</b> ${username}\n<b>Total Keys:</b> ${keyCount}`);
+          refreshUserList();
+          
+          // Clear premium input
+          premiumInput.value = '';
+        } else {
+          showResult('Failed to add Premium key', true);
+        }
+      }
+      
+      // Function to remove a user
+      function removeUser(username) {
+        if (!username) {
+          showResult('Username is required', true);
+          return;
+        }
+        
+        const users = getUsers();
+        const filteredUsers = users.filter(u => u.username !== username);
+        
+        if (users.length === filteredUsers.length) {
+          showResult(`User "${username}" not found`, true);
+          return;
+        }
+        
+        if (saveUsers(filteredUsers)) {
+          showResult(`User "${username}" has been removed`, false, true);
+          sendTelegramMessage(`❌ <b>User Removed</b>\n\n<b>Username:</b> ${username}`);
+          refreshUserList();
+        } else {
+          showResult('Failed to remove user', true);
+        }
+      }
+      
+      // Function to enable a user
+      function enableUser(username) {
+        if (!username) {
+          showResult('Username is required', true);
+          return;
+        }
+        
+        const users = getUsers();
+        const userIndex = users.findIndex(u => u.username === username);
+        
+        if (userIndex === -1) {
+          showResult(`User "${username}" not found`, true);
+          return;
+        }
+        
+        users[userIndex].active = true;
+        
+        if (saveUsers(users)) {
+          showResult(`User "${username}" has been enabled`, false, true);
+          sendTelegramMessage(`✅ <b>User Enabled</b>\n\n<b>Username:</b> ${username}`);
+          refreshUserList();
+        } else {
+          showResult('Failed to enable user', true);
+        }
+      }
+      
+      // Function to disable a user
+      function disableUser(username) {
+        if (!username) {
+          showResult('Username is required', true);
+          return;
+        }
+        
+        const users = getUsers();
+        const userIndex = users.findIndex(u => u.username === username);
+        
+        if (userIndex === -1) {
+          showResult(`User "${username}" not found`, true);
+          return;
+        }
+        
+        users[userIndex].active = false;
+        
+        if (saveUsers(users)) {
+          showResult(`User "${username}" has been disabled`, false, true);
+          sendTelegramMessage(`❌ <b>User Disabled</b>\n\n<b>Username:</b> ${username}`);
+          refreshUserList();
+        } else {
+          showResult('Failed to disable user', true);
+        }
+      }
+      
+      // Add event listeners
+      addUserBtn.addEventListener('click', () => {
+        addUser(
+          usernameInput.value.trim(), 
+          passwordInput.value.trim(), 
+          balanceInput.value.trim(),
+          datadomeInput.value.trim(),
+          premiumInput.value.trim()
+        );
+      });
+      
+      removeUserBtn.addEventListener('click', () => {
+        removeUser(usernameInput.value.trim());
+      });
+      
+      enableUserBtn.addEventListener('click', () => {
+        enableUser(usernameInput.value.trim());
+      });
+      
+      disableUserBtn.addEventListener('click', () => {
+        disableUser(usernameInput.value.trim());
+      });
+      
+      addBalanceBtn.addEventListener('click', () => {
+        addBalance(usernameInput.value.trim(), balanceInput.value.trim());
+      });
+      
+      addDatadomeBtn.addEventListener('click', () => {
+        addDatadome(usernameInput.value.trim(), datadomeInput.value.trim());
+      });
+      
+      addPremiumBtn.addEventListener('click', () => {
+        // Store the premium key in localStorage for generateStandardCookie function
+        if (premiumInput.value.trim()) {
+          localStorage.setItem('lastAddedPremiumKey', premiumInput.value.trim());
+        }
+        
+        addPremium(usernameInput.value.trim(), premiumInput.value.trim());
+      });
+      
+      listUsersBtn.addEventListener('click', () => {
+        refreshUserList();
+      });
+      
+      // Also update localStorage when premium input changes
+      premiumInput.addEventListener('input', () => {
+        if (premiumInput.value.trim()) {
+          localStorage.setItem('lastAddedPremiumKey', premiumInput.value.trim());
+        }
+      });
+      
+      // Initialize
+      if (!localStorage.getItem('userDatabase')) {
+        // Initialize with default user
+        const initialUsers = [
+          {
+            username: 'saiki',
+            password: 'saiki',
+            active: true,
+            balance: 100,
+            datadome: ['eTfeV2stDwJ7xfIO~6HutoR6fryzaPp7RHicNjxnaXNYIRgnRLRo897BXl2uAfWWhJu9o3Iy4urT2~xuDlU6XaAUnot_yHIIOQMMay2hBr2YleK6PQ8TV_WRCVeNTMyN'],
+            premium: ['PREMIUM-KEY-12345-SAIKI']
+          }
+        ];
+        localStorage.setItem('userDatabase', JSON.stringify(initialUsers));
+      }
+      
+      // Send notification that admin panel was accessed
+      sendTelegramMessage(`🔧 <b>Admin Panel Accessed</b>\n\n<b>Time:</b> ${new Date().toLocaleString()}\n<b>Browser:</b> ${navigator.userAgent}`);
+    });
+  </script>
+</body>
+</html>

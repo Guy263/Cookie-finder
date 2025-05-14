@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <div class="logo">
+        <img src="saiki-logo.png" alt="Saiki Logo">
+        <h1>SAIKI SC</h1>
+      </div>
+      <div class="user-info">
+        <div class="balance-info">
+          <i class="fas fa-wallet"></i>
+          <span id="userBalance">Balance: $0.00</span>
+        </div>
+        <span id="userGreeting">Welcome, User</span>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </header>
+    
+    <div class="dashboard-content">
+      <div class="sidebar">
+        <nav>
+          <ul>
+            <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+          </ul>
+        </nav>
+      </div>
+      
+      <main class="main-content">
+        <h2>Tool Selection</h2>
+        
+        <div class="selection-container">
+          <div class="selection-card">
+            <div class="card-header">
+              <h3><i class="fas fa-gamepad"></i> Online Games</h3>
+            </div>
+            <div class="card-body">
+              <div class="select-wrapper">
+                <select id="gameSelect" class="custom-select">
+                  <option value="" disabled selected>Select a game</option>
+                  <option value="cod">CALL OF DUTY GARENA</option>
+                  <option value="ml">MOBILE LEGENDS</option>
+                </select>
+              </div>
+              <div class="game-info">
+                <div id="gameInfo" class="info-box">
+                  <p>Select a game to see available tools</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="selection-card">
+            <div class="card-header">
+              <h3><i class="fas fa-cookie"></i> Cookie Finder</h3>
+            </div>
+            <div class="card-body">
+              <div class="select-wrapper">
+                <select id="cookieSelect" class="custom-select">
+                  <option value="" disabled selected>Select cookie type</option>
+                  <option value="cookie">[10] DATADOME $50</option>
+                  <option value="datadome">DATADOME $10</option>
+                </select>
+              </div>
+              <div class="cookie-info">
+                <div id="cookieInfo" class="info-box">
+                  <p>Select a cookie type to see options</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="action-buttons">
+          <button id="generateBtn" class="action-btn generate-btn">
+            <i class="fas fa-bolt"></i> Generate
+          </button>
+          <button id="refreshBtn" class="action-btn refresh-btn">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+        
+        <div class="result-container">
+          <div class="result-header">
+            <h3>Results</h3>
+            <button id="copyBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+          </div>
+          <div class="result-content" id="resultContent">
+            <p class="placeholder-text">Generated content will appear here</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <!-- Include balance.js before dashboard.js -->
+  <script src="balance.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
